@@ -1,0 +1,515 @@
+body {
+    font-size: .85em;
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    color: #232323;
+    background-color: #fff;
+}
+
+header, footer, nav, section {
+    display: block;
+}
+
+
+/* Styles for basic forms
+-----------------------------------------------------------*/
+fieldset {
+    border: 1px solid #ddd;
+    padding: 0 1.4em 1.4em 1.4em;
+    margin: 0 0 1.5em 0;
+}
+
+legend {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+textarea {
+    min-height: 75px;
+}
+
+.editor-label {
+    margin: 1em 0 0 0;
+}
+
+.editor-field {
+    margin: 0.5em 0 0 0;
+}
+
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error {
+    color: #f00;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #f00;
+    background-color: #fee;
+}
+
+.validation-summary-errors {
+    font-weight: bold;
+    color: #f00;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+/******************/
+/* Custom Content */
+/******************/
+
+body {
+    background-color: #f5f0dd;
+}
+
+/* Banner information */
+
+#header_banner {
+    position: relative;
+    background: -moz-linear-gradient(bottom, #485a28, #788a58);
+    background: -o-linear-gradient(bottom, #485a28, #788a58);
+    background: -webkit-linear-gradient(bottom, #485a28, #788a58);
+    background: linear-gradient(to bottom, #485a28, #788a58);
+    margin-top: -1em;
+    margin-right: -0.6em;
+    margin-left: -0.6em;
+    height: 125px;
+}
+
+#tv_header {
+    color: white;
+    padding-left: 2em;
+    font-size: 150%;
+    position: absolute;
+    margin-top: 20px;
+}
+
+#acadia_logo {
+    float: right;
+    margin-right: 2em;
+    margin-top: 1.5em;
+}
+
+#temp {
+    text-decoration: none;
+}
+
+#wpi_logo {
+    float: right;
+    margin-right: 2em;
+    margin-top: 0.5em;
+}
+
+/* menu bar */
+
+div.menu_bar {
+    position: relative;
+    margin: 0;
+    margin-top: -31px;
+    margin-left: -0.5em;
+    padding: 0;
+    height: 30px;
+    width: 90%;
+    z-index: 15;
+}
+
+div.menu_bar ul {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    list-style-type: none;
+    overflow: visible;
+}
+
+div.menu_bar ul li {
+    display: block;
+    float: left;
+    height: auto;
+    width: 150px;
+}
+
+div.menu_bar li > a, div.menu_bar li > a:link,
+div.menu_bar li > a:visited, div.menu_bar li > a:active {
+    display: block;
+    padding: 0 0 0 10px;
+    width: 139px;
+    border-right: 1px solid #485a28;
+    border-top: 1px solid #485a28;
+    border-radius: 10px;
+    line-height: 30px;
+    font-size: 17px;
+    text-decoration: none;
+    background-color: #6a7c4a;
+    color: white;
+    cursor: pointer;
+}
+
+div.menu_bar li:hover > a {
+    color: black;
+    background-color: #7c9e6c;
+}
+
+/* submenu */
+
+div.menu_bar ul ul {
+    display: none;
+    position: static;
+    height: auto;
+    width: 215px;
+    border: 1px solid #485a28;
+    background-color: #596b39;
+    border-radius: 10px;
+}
+
+div.menu_bar li:hover > ul {
+    display: block;
+}
+
+div.menu_bar ul ul li {
+    position: relative;
+    float: none;
+    display: block;
+    /*height: 28px;*/
+    width: 100%;
+    border: none;
+}
+
+div.menu_bar ul ul li > a, div.menu_bar ul ul li > a:link,
+div.menu_bar ul ul li > a:visited, div.menu_bar ul ul li > a:active {
+    height: 100%;
+    width: 96%;
+    padding: 0 0 0 4%;
+    line-height: 28px;
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
+div.menu_bar ul ul li:hover > a {
+    background-color: #7c9e6c;
+    color: black;
+}
+
+/* sub-sub menus (and so on) */
+
+div.menu_bar ul ul ul {
+    position: absolute;
+    top: 4px;
+    left: 155px;
+    margin: 0;
+}
+
+a.menu_nav:after {
+    content: "\00BB";
+    float: right;
+    margin-right: 8px;
+}
+
+/* Map and display areas */
+
+div.map_container {
+    position: relative;
+}
+
+div.display {
+    margin-top: 46px;
+    height: 550px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+#close_display {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    padding: 0.2em;
+    border: 1px solid #485a28;
+    background-color: #596b39;
+    border-radius: 10px;
+}
+
+#close_display:hover {
+    cursor: pointer;
+}
+
+#close_display p {
+    color: white;
+    padding: 0.5em;
+}
+
+#pano_canvas {
+    margin-left: 1em;
+    width: 55%;
+}
+
+#info_area {
+    margin-left: 2em;
+    width: 40%;
+}
+
+#mapSelection {
+    position: fixed;
+    height: 500px;
+    width: 800px;
+    right: 2em;
+    top: 15em;
+}
+
+#mapPointSelectionCanvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 20px;
+    left: 0px;
+}
+
+#mapSelection label {
+    color: #485a28;
+}
+
+/* Trail Lists */
+
+span.Title {
+    color: #485a28;
+    font-size: 1.5em;
+}
+
+span.SubTitle {
+    color: #485a28;
+    font-size: 1.25em;
+}
+
+div.trailList {
+    /*border: 1px solid #788a58;
+    border-collapse: collapse;*/
+    width: 40%;
+}
+
+div.trailList p.Link a {
+    text-decoration: underline;
+    color: #485a28;
+    padding-left: 2em;
+}
+
+div.trailList p.SubLink a {
+    text-decoration: underline;
+    color: #485a28;
+    margin-left: 4em;
+}
+
+span.close_trail_points_list {
+    color: #ffffff;
+    background-color: #596b39;
+    margin-left: 1em;
+    border: 1px solid #485a28;
+    border-radius: 2px;
+}
+
+span.close_trail_points_list:hover {
+    cursor: pointer;
+}
+
+div.trail_poi_list {
+    display: inline-block;
+    width: 48%;
+    margin-left: 1em;
+    vertical-align: top;
+}
+
+div.trail_pano_list {
+    display: inline-block;
+    width: 48%;
+    margin-left: 1em;
+    padding-left: 1em;
+    border-left: 1px solid #485a28;
+    vertical-align: top;
+}
+
+/* Points of Interest */
+
+span#seePoI {
+    color: #ffffff;
+    text-decoration: underline;
+    font-size: 0.75em;
+}
+
+span#seePoI:hover {
+    cursor: pointer;
+}
+
+div#poiInfoPopup p {
+    max-width: 600px;
+}
+
+div#poiInfoPopup img {
+    max-width: 1200px;
+}
+
+div.infoAreaDiv a {
+    color: white;
+}
+
+/* PoIs Page */
+
+div.poiCatTop {
+    border: 1px solid #788a58;
+    border-collapse: collapse;
+}
+
+div.poiCatTop p.Link a {
+    text-decoration: underline;
+    color: #485a28;
+    padding-left: 2em;
+}
+
+div.poiCat {
+    margin-bottom: 2px;
+    border-bottom: 2px solid #788a58;
+    border-collapse: collapse;
+    color: #485a28;
+}
+
+div.subPoiCat {
+    margin-left: 4em;
+}
+
+span.poiSubLink a {
+    text-decoration: underline;
+    color: #485a28;
+}
+
+span.closeCat {
+    color: #ffffff;
+    background-color: #596b39;
+    margin-left: 1em;
+    border: 1px solid #485a28;
+    border-radius: 2px;
+}
+
+span.closeCat:hover {
+    cursor: pointer;
+}
+
+/* Overriding JQueryUI Content */
+
+/* General */
+
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-left,
+.ui-corner-tl {
+    border-top-left-radius: 10px;
+}
+
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-right,
+.ui-corner-tr {
+	border-top-right-radius: 10px;
+}
+
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-left,
+.ui-corner-bl {
+	border-bottom-left-radius: 10px;
+}
+
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-right,
+.ui-corner-br {
+	border-bottom-right-radius: 10px;
+}
+
+/* Accordion */
+
+.ui-accordion-header {
+    border: 1px solid #485a28;
+    background: #6a7c4a;
+    color: white;
+}
+
+.ui-state-hover, .ui-state-focus {
+    border: 1px solid #485a28;
+    background: #596b39;
+    color: white;
+}
+
+.ui-accordion-header-active {
+    border: 1px solid #485a28;
+    background: #9daf7d;
+    color: white;
+}
+
+.ui-accordion-content {
+    border: 1px solid #485a28;
+    background: #9daf7d;
+    color: white;
+}
+
+.ui-accordion-content-active {
+    border: 1px solid #485a28;
+    background: #9daf7d;
+    color: white;
+}
+
+/* Tooltip */
+
+.ui-tooltip {
+    max-width: 400px;
+}
+
+body .ui-tooltip {
+    border-width: 1px;
+}
+
+.ui-tooltip {
+    -webkit-box-shadow: 0 0 5px #374917;
+    box-shadow: 0 0 5px #374917;
+    border: 1px solid #485a28;
+    background: #6a7c4a;
+}
+
+.ui-tooltip-content {
+    background: #6a7c4a;
+    color: white;
+}
+
+/* Dialog */
+
+.ui-dialog {
+    border: 1px solid #485a28;
+    background: #9daf7d;
+    color: white;
+}
+
+.ui-dialog-titlebar {
+    border: 1px solid #485a28;
+    background: #6a7c4a;
+    color: white;
+}
+
+.ui-dialog-title {
+    color: white;
+}
+
+.ui-dialog-titlebar-close {
+    border: 1px solid #485a28;
+    background: #596b39;
+    color: white;
+}
+
+.ui-dialog-content {
+    background: #9daf7d;
+    color: white;
+}

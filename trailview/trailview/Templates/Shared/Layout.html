@@ -1,0 +1,28 @@
+{% load inclusions %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>{%block title %}{% endblock %}</title>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBbSAFOr9H6wq_7gP9t1K2gHFolipdEgVs&sensor=false"></script>
+	<!-- Add CSS Stuff -->
+	<link rel="stylesheet" type="text/css" href="{% static "CSS/jquery-ui.css" %}" />
+	<link rel="stylesheet" type="text/css" href="{% static "CSS/Site.css" %}" />
+</head>
+<body>
+	<script type="text/javascript" src="{% static "Scripts/jquery-2.0.3.min.js" %}"></script>
+	<script type="text/javascript" src="{% static "Scripts/jquery-ui.js" %}"></script>
+	<script type-"text/javascript" src="{% static "Scripts/trailview_site_general.js" %}"></script>
+	
+	<div id="header_banner">
+		{% render_header_banner %}
+	</div>
+	<div class="menu_bar">
+		{% render_menu_bar %}
+	</div>
+	{% block content %}{% endblock %}
+</body>
+</html>

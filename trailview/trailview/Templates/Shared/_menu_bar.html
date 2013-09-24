@@ -1,0 +1,36 @@
+<div class="menu_bar">
+    <ul>
+        <li>
+            <a href="/Trails/">Trails</a>
+            <ul>
+                {% for trail in trails %}
+                    <li>
+                        {% with link = "/Map/Trail/"|add:trail.id %}
+                        <a href={{ link }}>{{ trail.Name }}</a>
+                        {% endwith %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>
+            <a href="/PoIs/">Points of Interest</a>
+            <ul>
+                <li>
+                    <a href="/PoIs/Atmospherics/">Atmoshperics</a>
+                </li>
+                <li>
+                    <a href="/PoIs/Fauna/">Fauna</a>
+                </li>
+                <li>
+                    <a href="/PoIs/Flora/">Flora</a>
+                </li>
+                <li>
+                    <a href="/PoIs/Landmarks/">Landmarks</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">Trail History</a>
+        </li>
+    </ul>
+</div>

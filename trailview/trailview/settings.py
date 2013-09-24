@@ -68,6 +68,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    "C:/Users/Tim Calvert/Documents/Programming/Django Programs/Trail View Site/trailview/trailview/static",
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -123,6 +124,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
 	'trailview.Models',
+    'trailview.Inclusions',
     #'django.contrib.sites',
     #'django.contrib.messages',
     'django.contrib.staticfiles',

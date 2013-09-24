@@ -1,0 +1,50 @@
+{% extends 'Layout.html' %}
+
+{% block title %}{{ model.trailName }}{% endblock %}
+
+{% block content %}
+
+<script type="text/javascript">
+    var sRequestMoreData = "/RequestMoredData/";
+    var sRequestPoI = "/RequestPoI/";
+    var sPointsOfInterestAtmo = "/RequestPoI/Atmo/";
+    var sPointsOfInterestFau = "/RequestPoI/Fau/";
+    var sPointsOfInterestFlo = "/RequestPoI/Flo/";
+    var sPointsOfInterestLan = "/RequestPoI/Lan/";
+    var totalPanos = {{ model.totalPano }};
+</script>
+
+<script type="text/javascript" src="{% static "/Scripts/trailview_site_map_operations.js" %}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () { begin('@Html.Raw(Model.PanoramasInJSON)', '@Model.initialPanoName', '@Model.trailName', '@Html.Raw(Model.TrailWidePoIsJSON)'); })
+</script>
+
+<div class="map_container">
+    <span id="close_display">
+        <!-- Filled by JS -->
+    </span>
+    <div class="display" id="pano_canvas">
+        <!-- Empty area for Google Street View -->
+    </div>
+    <div class="display" id="info_area">
+        {% render_map_info_area %}
+    </div>
+</div>
+
+<div id="poiInfoPopup">
+</div>
+
+<script type="text/javascript">
+    $('#poiInfoPopup').dialog({
+        autoOpen: false,
+        modal: true,
+        resizable: true,
+        width: 'auto',
+        height: 'auto',
+        position: { my: 'center top', at: 'center top' },
+        close: function (event, ui) { $('#poiInfoPopup').html(''); } 
+    });
+</script>
+
+{% endblock %}

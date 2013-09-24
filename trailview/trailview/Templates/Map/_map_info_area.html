@@ -1,0 +1,49 @@
+<div id="accordion">
+    {% comment %}
+    # This is just some generic information about the panorama that can be useful during development 
+    <h3>Generic Info</h3>
+    <div id="generic-info">
+        <p>Just some temporary data</p>
+        <table>
+            <tr>
+                <td><b>Position</b></td>
+                <td id="pos_cell"></td>
+            </tr>
+            <tr>
+                <td><b>POV Heading</b></td>
+                <td id="heading_cell"></td>
+            </tr>
+            <tr>
+                <td><b>POV Pitch</b></td>
+                <td id="pitch_cell"></td>
+            </tr>
+            <table id="links_table"></table>
+        </table>
+    </div>
+    {% endcomment %}
+
+    <h3>Trail Overview</h3>
+    <div id="trail-overview" class="infoAreaDiv">
+        <p>Various things will go here, such as:</p>
+        <ul>
+            <li>Trail History</li>
+            <li>Others?</li>
+        </ul>
+    </div>
+
+    <h3>Landmarks</h3>
+    <div id="points-of-interest" class="infoAreaDiv"></div>
+
+    <h3>Flora</h3>
+    <div id="flora" class="infoAreaDiv"></div>
+
+    <h3>Fauna</h3>
+    <div id="fauna" class="infoAreaDiv"></div>
+
+    <h3>Weather and Atmospheric Data</h3>
+    <div id="weather-atmospheric" class="infoAreaDiv"></div>
+</div>
+
+<script type="text/javascript">
+    $("#accordion").accordion({ heightStyle: "content", collapsible: "true" });
+</script>

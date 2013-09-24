@@ -1,9 +1,8 @@
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Trails
 class Trail(models.Model):
-	TrailId = models.IntegerField(primary_key=True)
+	# id is default pk
 	Name = models.CharField(max_length=100)
 	
 	def __unicode__(self):
@@ -11,10 +10,11 @@ class Trail(models.Model):
 		
 # Panoramas
 class Panorama(models.Model):
-	PanoId = models.IntegerField(primary_key=True)
+	# id is default pk
 	TrailId = models.ForeignKey(Trail)
 	Name = models.CharField(max_length=100)
 	Description = models.CharField(max_length=1000)
+	PanoNumber = models.IntegerField()
 	LocationLat = models.DecimalField(max_digits=30, decimal_places=25)
 	LocationLng = models.DecimalField(max_digits=30, decimal_places=25)
 	TileWidth = models.IntegerField()
@@ -27,7 +27,7 @@ class Panorama(models.Model):
 		
 # Links
 class Link(models.Model):
-	LinkId = models.IntegerField(primary_key=True)
+	# id is default pk
 	PanoId = models.ForeignKey(Panorama)
 	TrailId = models.ForeignKey(Trail)
 	Heading = models.IntegerField()
@@ -40,7 +40,7 @@ class Link(models.Model):
 		
 # Points of Interest
 class PointOfInterest(models.Model):
-	POIId = models.IntegerField(primary_key=True)
+	# id is default pk
 	StartPanoNum = models.IntegerField(null=True)
 	EndPanoNum = models.IntegerField(null=True)
 	TrailId = models.ForeignKey(Trail)
