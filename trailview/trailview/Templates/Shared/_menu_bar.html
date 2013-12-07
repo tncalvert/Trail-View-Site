@@ -5,7 +5,7 @@
             <ul>
                 {% for trail in trails %}
                     <li>
-                        {% with link = "/Map/Trail/"|add:trail.id %}
+                        {% with link="/Map/Trail/"|add:trail.id %}
                         <a href={{ link }}>{{ trail.Name }}</a>
                         {% endwith %}
                     </li>
