@@ -1,6 +1,6 @@
 # Used to enter data in the database, based on the files given
 
-from Models.models import Trail, Panorama, Link, PointOfInterest
+from trailview.Models.models import Trail, Panorama, Link, PointOfInterest
 from os import walk, path
 from io import open, IOBase
 
