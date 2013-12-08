@@ -11,7 +11,7 @@ panos_to_request = 50
 
 # Request for Home Page
 def Home_Home(request):
-	return render_to_response('Home.html', {})
+    return render_to_response('Home.html', {})
 
 # Request for page listing all Trails
 def Trails_Trails(request):

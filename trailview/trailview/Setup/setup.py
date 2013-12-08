@@ -53,10 +53,10 @@ def insertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_
 			return
 
 	Trail(Name=Trail_Name).save()
-	trail_id = Trail.objects.get(Name=Trail_Name).id
+	trail = Trail.objects.get(Name=Trail_Name)
 
 	for idx,c in enumerate(comp):
-		Panorama(TrailId=trail_id,
+		Panorama(TrailId=trail,
 			     Name=c.Name,
 			     Description=Trail_Name + " Panorama " + str(idx + 1),
 			     PanoNumber=idx,
@@ -64,8 +64,8 @@ def insertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_
 			     LocationLng=c.Lng,
 			     TileWidth=Tile_Width,
 			     WorldWidth=Image_Width,
-			     Heading=c.Heading,
-			     InitialHeading=int(forw_headings[idx - 1])).save()
+			     ForwardHeading=c.Heading,
+			     InitialForwardHeading=int(forw_headings[idx - 1])).save()
 
 	panos = Panorama.objects.all().order_by('PanoNumber')
 
@@ -73,56 +73,56 @@ def insertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_
 	# Links for entry panos if needed
 	if(Entry_Pano == 'True'):
 		# Entry pano into custom area
-		Link(PanoId=panos[offset].id,
-			 TrailId=trail_id,
+		Link(PanoId=panos[offset],
+			 TrailId=trail,
 			 Heading=int(forw_headings[offset]),
 			 Description="Into " + Trail_Name,
 			 PanoName=panos[offset + 1].Name,
 			 IsEntryPano='True').save()
 		offset += 1
 		# Out of custom area
-		Link(PanoId=panos[offset].id,
-			 TrailId=trail_id,
+		Link(PanoId=panos[offset],
+			 TrailId=trail,
 			 Heading=(int(forw_headings[offset]) if ((int(forw_headings[offset] - 180) > 0)) else (360 - (forw_headings[offset] - 180))),
 			 Description="Out of " + Trail_Name,
 			 PanoName=panos[offset - 1].Name,
 			 IsEntryPano='False').save()
 
 	# First (possibly lone) link for first custom pano
-	Link(PanoId=panos[offset].id,
-		 TrailId=trail_id,
+	Link(PanoId=panos[offset],
+		 TrailId=trail,
 		 Heading=int(forw_headings[offset]),
 		 Description='Forward',
-		 PanoName=panos[offset].Name,
+		 PanoName=panos[offset + 1].Name,
 		 IsEntryPano='False').save()
 
 	offset += 1
 
 	while offset < (len(comp) - 1):
 		# Backwards link
-		Link(PanoId=panos[offset].id,
-			 TrailId=trail_id,
+		Link(PanoId=panos[offset],
+			 TrailId=trail,
 			 Heading=int(forw_headings[offset]),
 			 Description='Backwards',
-			 PanoName=panos[offset + 1].Name,
+			 PanoName=panos[offset - 1].Name,
 			 IsEntryPano='True').save()
 
 		# Forwards link
-		Link(PanoId=panos[offset].id,
-		 TrailId=trail_id,
+		Link(PanoId=panos[offset],
+		 TrailId=trail,
 		 Heading=int(forw_headings[offset]),
 		 Description='Forward',
-		 PanoName=panos[offset].Name,
+		 PanoName=panos[offset + 1].Name,
 		 IsEntryPano='False').save()
 
 		offset += 1
 
 	# Final backwards link
-	Link(PanoId=panos[offset].id,
-			 TrailId=trail_id,
+	Link(PanoId=panos[offset],
+			 TrailId=trail,
 			 Heading=int(forw_headings[offset]),
 			 Description='Backwards',
-			 PanoName=panos[offset + 1].Name,
+			 PanoName=panos[offset - 1].Name,
 			 IsEntryPano='True').save()
 
 	# Clean up
@@ -132,7 +132,7 @@ def insertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_
 
 	
 def safeInsertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_Pano, Image_Width, Tile_Width):
-	if not os.exists(Pano_Dir):
+	if not path.exists(Pano_Dir):
 		print "Pano Dir doesn't exists"
 		return
 
@@ -145,7 +145,7 @@ def safeInsertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, En
 		return
 
 def clearDatabaseAndInsertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_Pano, Image_Width, Tile_Width):
-	if not os.exists(Pano_Dir):
+	if not path.exists(Pano_Dir):
 		print "Pano Dir doesn't exists. Data has not been deleted."
 		return
 
@@ -161,9 +161,9 @@ def clearDatabaseAndInsertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Tr
 		headings_file.close()
 		forw_headings_file.close()
 
-	models.PointOfInterest.objects.all().delete()
-	models.Link.objects.all().delete()
-	models.Panorama.objects.all().delete()
-	models.Trail.objects.all().delete()
+	PointOfInterest.objects.all().delete()
+	Link.objects.all().delete()
+	Panorama.objects.all().delete()
+	Trail.objects.all().delete()
 
 	insertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_Pano, Image_Width, Tile_Width)

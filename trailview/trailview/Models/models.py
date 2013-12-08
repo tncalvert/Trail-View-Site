@@ -6,7 +6,7 @@ class Trail(models.Model):
 	Name = models.CharField(max_length=100)
 	
 	def __unicode__(self):
-		return self.Nam
+		return self.Name
 		
 # Panoramas
 class Panorama(models.Model):
