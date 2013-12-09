@@ -24,9 +24,28 @@ def Trails_Trails(request):
 	trails = models.Trail.objects.all()
 	return render_to_response('Trails.html', {'trails': trails, 'filter_options': filter_options})
 
+def Trails_GetPossibleEntryPoints(request, trail_id, filter):
+    if(filter == 'PoIs'):
+        pois = models.PointOfInterest.objects.filter(TrailId = int(trail_id))
+    elif(filter == 'Atmo'):
+        pois = models.PointOfInterest.objects.filter(TrailId = int(trail_id), Category = models.PoICategory.Atmospheric)
+    elif(filter == 'Fau'):
+        pois = models.PointOfInterest.objects.filter(TrailId = int(trail_id), Category = models.PoICategory.Fauna)
+    elif(filter == 'Flo'):
+        pois = models.PointOfInterest.objects.filter(TrailId = int(trail_id), Category = models.PoICategory.Flora)
+    elif(filter == 'Lan'):
+        pois = models.PointOfInterest.objects.filter(TrailId = int(trail_id), Category = models.PoICategory.Landmark)
+    else:
+        panos = panos = models.Panorama.objects.filter(TrailId = int(trail_id))
+    
+    if not 'panos' in locals():
+        panos = models.Panorama.objects.filter(TrailId = int(trail_id), PanoNumber__in = map(lambda x: x.StartPanoNum or -1, pois))
+
+    # create JSModels for markers and return json of them
+
 # Request for Map by trail_id
 def Map_ViewTrailById(request, trail_id):
-	trail = models.Trail.objects.get(TrailId = int(trail_id))
+	trail = models.Trail.objects.get(id = int(trail_id))
 	panos = models.Panorama.objects.filter(TrailId = int(trail_id), PanoNumber__lte = surrounding_panos)
 	pano_models = []
 	for p in panos:

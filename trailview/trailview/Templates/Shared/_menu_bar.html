@@ -1,3 +1,5 @@
+{% load filters %}
+
 <div class="menu_bar">
     <ul>
         <li>
@@ -5,7 +7,7 @@
             <ul>
                 {% for trail in trails %}
                     <li>
-                        {% with link="/Map/Trail/"|add:trail.id %}
+                        {% with link="/Map/Trail/"|catNum:trail.id %}
                         <a href={{ link }}>{{ trail.Name }}</a>
                         {% endwith %}
                     </li>

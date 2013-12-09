@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.Home_Home),
     url(r'^Trails/$', views.Trails_Trails),
+    url(r'^Trails/GetPossibleEntryPoints/(\d+)/(\w+)$', views.Trails_GetPossibleEntryPoints),
     url(r'^Map/Trail/(\d+)/', views.Map_ViewTrailById),
     url(r'^Map/Trail/(\d+)/(\d+)/$', views.Map_ViewTrailStartingAtPano),
 )

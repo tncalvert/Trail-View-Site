@@ -114,7 +114,7 @@ TEMPLATE_DIRS = (
 	os.path.join(os.path.dirname(__file__), 'Templates/Home').replace('\\','/'),
 	os.path.join(os.path.dirname(__file__), 'Templates/Map').replace('\\','/'),
 	os.path.join(os.path.dirname(__file__), 'Templates/PointsOfInterest').replace('\\','/'),
-	os.path.join(os.path.dirname(__file__), 'Templates/Trail').replace('\\','/'),
+	os.path.join(os.path.dirname(__file__), 'Templates/Trails').replace('\\','/'),
 	os.path.join(os.path.dirname(__file__), 'Templates/Shared').replace('\\','/'),
 )
 
@@ -124,7 +124,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
 	'trailview.Models',
-    'trailview.Inclusions',
+    'trailview.CustomDjangoTags',
     #'django.contrib.sites',
     #'django.contrib.messages',
     'django.contrib.staticfiles',

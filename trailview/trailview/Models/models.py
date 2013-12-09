@@ -23,7 +23,7 @@ class Panorama(models.Model):
 	InitialForwardHeading = models.IntegerField()
 	
 	def __unicode__(self):
-		return "%d(%d)" % (TrailId, PanoId)
+		return "%s(%d)" % (self.TrailId, self.id)
 		
 # Links
 class Link(models.Model):
@@ -36,7 +36,7 @@ class Link(models.Model):
 	IsEntryPano = models.BooleanField()
 	
 	def __unicode__(self):
-		return "%d(%d):%s" % (self.PanoId, self.LinkId, self.PanoName)
+		return "%s(%d):%s" % (self.PanoId, self.id, self.PanoName)
 		
 # Points of Interest
 class PointOfInterest(models.Model):
@@ -51,7 +51,7 @@ class PointOfInterest(models.Model):
 	Description = models.CharField(max_length=1000)
 	
 	def __unicode__(self):
-		return "%s%d" % (self.Name, self.PoIId)
+		return "%s%s" % (self.Name, self.PoIId)
 		
 class PoICategory:
 	Atmospheric = 0
