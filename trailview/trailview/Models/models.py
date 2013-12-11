@@ -46,12 +46,12 @@ class PointOfInterest(models.Model):
 	TrailId = models.ForeignKey(Trail)
 	Name = models.CharField(max_length=100)
 	PoICategory = models.IntegerField()
-	Photo = models.CharField(max_length=100)
-	Audio = models.CharField(max_length=100)
-	Description = models.CharField(max_length=1000)
+	Photo = models.CharField(max_length=100, null=True)
+	Audio = models.CharField(max_length=100, null=True)
+	Description = models.CharField(max_length=1000, null=True)
 	
 	def __unicode__(self):
-		return "%s%s" % (self.Name, self.PoIId)
+		return "%s%s" % (self.Name, self.id)
 		
 class PoICategory:
 	Atmospheric = 0

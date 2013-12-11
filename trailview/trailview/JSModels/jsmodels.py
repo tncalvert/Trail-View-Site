@@ -9,13 +9,13 @@ class LinkModel(object):
 		self.description = description
 
 class MapDataModel(object):
-	def __init__(self, PanoramasInJSON, initialPanoName, trailName, totalPanos, surroundingPanos, TrailWidePoIsJSON):
+	def __init__(self, PanoramasInJSON, initialPanoName, trailName, totalPanos, surroundingPanos, TrailWidePoIsInJSON):
 		self.PanoramasInJSON = PanoramasInJSON
 		self.initialPanoName = initialPanoName
 		self.trailName = trailName
 		self.totalPanos = totalPanos
 		self.surroundingPanos = surroundingPanos
-		self.TrailWidePoIsJSON = TrailWidePoIsJSON
+		self.TrailWidePoIsInJSON = TrailWidePoIsInJSON
 
 class MarkerModel(object):
 	def __init__(self, LocationLat, LocationLng, TrailId, PanoId, orderOfMarkers, Title):

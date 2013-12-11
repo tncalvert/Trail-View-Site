@@ -28,7 +28,21 @@ function requestPointInformation(trailId) {
     });
     markers.length = 0;
 
-    $.post(GetPossibleEntryPoints, { trailId: trailId, filter: $('#cbPointsFilter').val() }, handlePointInformation, 'json');
+    //$.post(GetPossibleEntryPoints + '/', { trailId: trailId, filter: $('#cbPointsFilter').val() }, handlePointInformation, 'json');
+    $.ajax(GetPossibleEntryPoints + '/',
+        {
+            type: 'POST',
+            data: {
+                trailId: trailId,
+                filter: $('#cbPointsFilter').val()
+            },
+            success: handlePointInformation,
+            error: function (jqXHR, status, error) {
+                console.log(status);
+                console.log(error);
+            }
+
+        });
 }
 
 function handlePointInformation(data) {

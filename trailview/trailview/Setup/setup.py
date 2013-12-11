@@ -1,8 +1,10 @@
 # Used to enter data in the database, based on the files given
 
+from django.core.exceptions import ObjectDoesNotExist
 from trailview.Models.models import Trail, Panorama, Link, PointOfInterest
 from os import walk, path
 from io import open, IOBase
+import re
 
 class InfoComp(object):
 	def __init__(self, Lat, Lng, Name, Heading):
@@ -154,7 +156,7 @@ def clearDatabaseAndInsertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Tr
 		headings_file = open(Headings)
 		forw_headings_file = open(Forw_Headings)
 	except IOError:
-		print "Failed to open a file. Data hsa not been deleted."
+		print "Failed to open a file. Data has not been deleted."
 		return
 	else:
 		gps_file.close()
@@ -167,3 +169,39 @@ def clearDatabaseAndInsertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Tr
 	Trail.objects.all().delete()
 
 	insertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_Pano, Image_Width, Tile_Width)
+
+# Reads in a file listing the the points of interest for a trail
+def addPoIsForTrail(POI_File):
+    try:
+        file = open(POI_File)
+    except IOError:
+        print "Could not open file. Please make sure it exists."
+    
+    # Matches the format of the information
+    reg = re.finditer(r"\{(\d+),\n(\d+),\n('[\w\s,.'\-]*'),\n(\d+),\n(\d+),\n('[\w\s,.'\-]*'|None),\n('[\w\s,.'\-]*'|None),\n('[\w\s,.!'\"\-]*'|None)\}", file.read())
+
+    vals = []
+
+    for r in reg:
+        vals.append(r.groups())
+
+    for v in vals:
+
+        try:
+            trail = Trail.objects.get(id = int(v[4]))
+        except ObjectDoesNotExist:
+            continue
+
+        PointOfInterest(StartPanoNum=int(v[0]),
+                        EndPanoNum=int(v[1]),
+                        TrailId=trail,
+                        Name=v[2],
+                        PoICategory=int(v[3]),
+                        Photo=v[5] if v[5] != 'None' else None,
+                        Audio=v[6] if v[6] != 'None' else None,
+                        Description=v[7] if v[7] != 'None' else None).save()
+
+
+# Executes a SQL query to fix links in a specific trail
+def fixLinksForTrail(Trail_Name, SQL_Query):
+    return ''
