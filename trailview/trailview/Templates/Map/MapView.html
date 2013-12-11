@@ -14,13 +14,15 @@
     var sPointsOfInterestFau = "/RequestPoI/Fau/";
     var sPointsOfInterestFlo = "/RequestPoI/Flo/";
     var sPointsOfInterestLan = "/RequestPoI/Lan/";
-    var totalPanos = {{ model.totalPano }};
+    var totalPanos = {{ model.totalPanos }};
 </script>
 
-<script type="text/javascript" src="{% static "/Scripts/trailview_site_map_operations.js" %}"></script>
+<script type="text/javascript" src="{% static "Scripts/trailview_site_map_operations.js" %}"></script>
 
 <script type="text/javascript">
-    $(document).ready(function () { begin('@Html.Raw(Model.PanoramasInJSON)', '@Model.initialPanoName', '@Model.trailName', '@Html.Raw(Model.TrailWidePoIsJSON)'); })
+    $(document).ready(function () {
+         begin('{{ model.PanoramasInJSON|safe }}', '{{ model.initialPanoName }}', '{{ model.trailName }}', '{{ model.TrailWidePoIsInJSON|safe }}'); 
+     });
 </script>
 
 <div class="map_container">

@@ -130,7 +130,7 @@ function initialize() {
 *  Returns the path to the needed tile
 */
 function getCustomPanoramaTileUrl(pano, zoom, tileX, tileY) {
-    return '/Content/panos/' + trailName + '/' + pano + '/tile_' + zoom + '_' + tileX + '-' + tileY +
+    return '/static/panos/' + trailName + '/' + pano + '/tile_' + zoom + '_' + tileX + '-' + tileY +
         '.png';
 }
 
