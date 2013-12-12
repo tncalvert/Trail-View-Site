@@ -1,3 +1,21 @@
+# This file is used to describe the points of interest for a trail.
+# The format is as follows:
+# {[StartPanoNumber] or None,
+# [EndPanoNumber] or None,
+# [Name surrounded by single quotes],
+# [Category (see below)],
+# [id of Trail the PoI belongs to],
+# [file name for image surrounded by single quotes] or None,
+# [file name for audio surrounded by single quotes] or None,
+# [Description surrounded by single quotes] or None}
+#
+# The exact formatting of each group is very important.
+# Each object is captured by a very specific regex so it must conform.
+# You may have to alter the particulars for a string (particularly
+# the description). I defined each to suit the current needs of the
+# text, but if you add special characters (punctuations, hyphens, etc.)
+# you may have to add it to the regex for that section.
+
 {206,
 312,
 'Common Yellowthroat',

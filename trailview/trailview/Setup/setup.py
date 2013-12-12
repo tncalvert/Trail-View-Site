@@ -178,7 +178,7 @@ def addPoIsForTrail(POI_File):
         print "Could not open file. Please make sure it exists."
     
     # Matches the format of the information
-    reg = re.finditer(r"\{(\d+),\n(\d+),\n('[\w\s,.'\-]*'),\n(\d+),\n(\d+),\n('[\w\s,.'\-]*'|None),\n('[\w\s,.'\-]*'|None),\n('[\w\s,.!'\"\-]*'|None)\}", file.read())
+    reg = re.finditer(r"\{(\d+|None),\n(\d+),\n('[\w\s,.'\-]*'),\n(\d+),\n(\d+),\n('[\w\s,.'\-]*'|None),\n('[\w\s,.'\-]*'|None),\n('[\w\s,.!'\"\-]*'|None)\}", file.read())
 
     vals = []
 
