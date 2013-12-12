@@ -85,7 +85,7 @@ def insertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_
 		# Out of custom area
 		Link(PanoId=panos[offset],
 			 TrailId=trail,
-			 Heading=((int(forw_headings[offset]) - 180) if (((int(forw_headings[offset]) - 180) >= 0)) else (360 - (int(forw_headings[offset]) - 180))),
+			 Heading=((int(forw_headings[offset]) - 180) if ((int(forw_headings[offset]) - 180) >= 0) else (360 + (int(forw_headings[offset]) - 180))),
 			 Description="Out of " + Trail_Name,
 			 PanoName=panos[offset - 1].Name,
 			 IsEntryPano='False').save()
@@ -104,7 +104,7 @@ def insertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_
 		# Backwards link
 		Link(PanoId=panos[offset],
 			 TrailId=trail,
-			 Heading=((int(forw_headings[offset]) - 180) if (((int(forw_headings[offset]) - 180) >= 0)) else (360 - (int(forw_headings[offset]) - 180))),
+			 Heading=((int(forw_headings[offset]) - 180) if ((int(forw_headings[offset]) - 180) >= 0) else (360 + (int(forw_headings[offset]) - 180))),
 			 Description='Backwards',
 			 PanoName=panos[offset - 1].Name,
 			 IsEntryPano='True').save()
@@ -122,7 +122,7 @@ def insertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_
 	# Final backwards link
 	Link(PanoId=panos[offset],
 			 TrailId=trail,
-			 Heading=((int(forw_headings[offset]) - 180) if (((int(forw_headings[offset]) - 180) >= 0)) else (360 - (int(forw_headings[offset]) - 180))),
+			 Heading=((int(forw_headings[offset]) - 180) if ((int(forw_headings[offset]) - 180) >= 0) else (360 + (int(forw_headings[offset]) - 180))),
 			 Description='Backwards',
 			 PanoName=panos[offset - 1].Name,
 			 IsEntryPano='True').save()
