@@ -2,10 +2,10 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
-from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from trailview.Models import models
 from trailview.JSModels import jsmodels
+from string import rstrip
 import simplejson
 
 import pdb
@@ -87,13 +87,13 @@ def Map_ViewTrailById(request, trail_id):
 												  pano=l.PanoName,
 												  description=l.Description).__dict__)
 
-		for poi in models.PointOfInterest.objects.filter(TrailId = int(trail_id), StartPanoNum__gte = p.PanoNumber, EndPanoNum__lte = p.PanoNumber):
+		for poi in models.PointOfInterest.objects.filter(TrailId = int(trail_id), StartPanoNum__lte = p.PanoNumber, EndPanoNum__gte = p.PanoNumber):
 			name = poi.Name.replace('"', '&quot;').replace("'", "&#39")
-			desc = poi.Description[:97].rstrip(" ", ".", ",", "'").extend("...").replace('"', '&quot;').replace("'", "&#39") if poi.Description else ''
+			desc = (rstrip(poi.Description[:97], " .,'") + "...").replace('"', '&quot;').replace("'", "&#39") if poi.Description else ''
 			poi_models.append(jsmodels.PointOfInterestInitModel(Name=name,
 																Description=desc, 
 																Category=poi.PoICategory).__dict__)
-
+		
 		pano_models.append(jsmodels.PanoramaModel(Name=p.Name, 
 												  Description=p.Description,
 												  PanoNumber=p.PanoNumber, 
@@ -109,7 +109,7 @@ def Map_ViewTrailById(request, trail_id):
 	twpoi_models = []
 	for twp in models.PointOfInterest.objects.filter(TrailId = int(trail_id), StartPanoNum = None, EndPanoNum = None):
 		name = poi.Name.replace('"', '&quot;').replace("'", "&#39")
-		desc = poi.Description[:97].rstrip(" ", ".", ",", "'").extend("...").replace('"', '&quot;').replace("'", "&#39") if poi.Description else ''
+		desc = (rstrip(poi.Description[:97], " .,'") + "...").replace('"', '&quot;').replace("'", "&#39") if poi.Description else ''
 		twpoi_models.append(jsmodels.PointOfInterestInitModel(Name=name, 
 															  Description=desc, 
 															  Category=poi.PoICategory).__dict__)

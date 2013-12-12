@@ -122,11 +122,11 @@ function openInfoItemOverlay(obj) {
     $('#poiInfoPopup').dialog('option', 'title', obj.Name);
     var content = '';
     if (obj.Photo != null)
-        content += '<img src="/Content/points_of_interest/Photos/' + obj.Photo + '" />';
+        content += '<img src="/static/points_of_interest/Photos/' + obj.Photo + '" />';
     if(obj.Description != null)
         content += '<p>' + obj.Description + '</p>';
     if(obj.Audio != null)
-        content += '<audio controls="controls">Sorry, your browser does not support embedded HTML5 audio.<source src="/Content/points_of_interest/Audio/' + obj.Audio + '" type="audio/mp3"/></audio>';
+        content += '<audio controls="controls">Sorry, your browser does not support embedded HTML5 audio.<source src="/static/points_of_interest/Audio/' + obj.Audio + '" type="audio/mp3"/></audio>';
     $('#poiInfoPopup').html(content);
     $('#poiInfoPopup').dialog('open');
 }

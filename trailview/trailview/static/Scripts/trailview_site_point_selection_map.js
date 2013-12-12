@@ -28,21 +28,7 @@ function requestPointInformation(trailId) {
     });
     markers.length = 0;
 
-    //$.post(GetPossibleEntryPoints + '/', { trailId: trailId, filter: $('#cbPointsFilter').val() }, handlePointInformation, 'json');
-    $.ajax(GetPossibleEntryPoints + '/',
-        {
-            type: 'POST',
-            data: {
-                trailId: trailId,
-                filter: $('#cbPointsFilter').val()
-            },
-            success: handlePointInformation,
-            error: function (jqXHR, status, error) {
-                console.log(status);
-                console.log(error);
-            }
-
-        });
+    $.post(GetPossibleEntryPoints, { trailId: trailId, filter: $('#cbPointsFilter').val() }, handlePointInformation, 'json');
 }
 
 function handlePointInformation(data) {
@@ -62,7 +48,7 @@ function handlePointInformation(data) {
         });
 
         google.maps.event.addListener(marker, 'click', function () {
-            window.location.href = (window.location.origin + MapView + '/' + this.trailId + '/' + this.panoId);
+            window.location.href = (window.location.origin + MapView + this.trailId + '/' + this.panoId);
         });
 
         markers.push(marker);
