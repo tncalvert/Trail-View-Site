@@ -75,9 +75,25 @@ def Trails_GetPossibleEntryPoints(request):
     return HttpResponse(simplejson.dumps(markers, use_decimal=True), mimetype='application/json')
 
 # Request for Map by trail_id
-def Map_ViewTrailById(request, trail_id):
-	trail = models.Trail.objects.get(id = int(trail_id))
-	panos = models.Panorama.objects.filter(TrailId = int(trail_id), PanoNumber__lte = surrounding_panos)
+def Map_ViewTrailById(request, trail_id, pano_id='-1'):
+	# This is only called on the first load, so reset original_panos
+	original_panos = []
+
+	if pano_id == '-1':
+		pano_id = models.Panorama.objects.get(TrailId = int(trail_id), PanoNumber = 0).id
+
+	pano_count = models.Panorama.objects.filter(TrailId = int(trail_id)).count()
+	center_pano = models.Panorama.objects.get(TrailId = int(trail_id), id = int(pano_id))
+
+	bottom = center_pano.PanoNumber - surrounding_panos
+	bottom = bottom if bottom >= 0 else 0
+	top = center_pano.PanoNumber + surrounding_panos + 1
+	top = top if top <= pano_count else pano_count
+
+	pano_nums = range(bottom, top)
+
+	trail_name = models.Trail.objects.get(id = int(trail_id)).Name
+	panos = models.Panorama.objects.filter(TrailId = int(trail_id), PanoNumber__in = pano_nums)
 	pano_models = []
 	for p in panos:
 		link_models = []
@@ -117,19 +133,15 @@ def Map_ViewTrailById(request, trail_id):
 	panos_json = simplejson.dumps(pano_models, use_decimal=True)
 	twpoi_json = simplejson.dumps(twpoi_models, use_decimal=True)
 	
-	pano_count = models.Panorama.objects.count()
+	pano_count = models.Panorama.objects.filter(TrailId = int(trail_id)).count()
 
 	model = jsmodels.MapDataModel(PanoramasInJSON=panos_json, 
-								  initialPanoName="", 
-								  trailName=trail.Name, 
+								  initialPanoName=center_pano.Name, 
+								  trailName=trail_name, 
 								  totalPanos=pano_count, 
 								  surroundingPanos=surrounding_panos, 
 								  TrailWidePoIsInJSON=twpoi_json)
 
-	original_panos.extend(range(0, surrounding_panos + 1))
+	original_panos.extend(pano_nums)
 
 	return render_to_response('MapView.html', {'model' : model})
-
-# Request for map by trail_id, loading at panorama with pano_id
-def Map_ViewTrailStartingAtPano(request, trail_id, pano_id):
-	return "asdf"

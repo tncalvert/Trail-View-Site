@@ -40,7 +40,7 @@
     // MapView must be given parameters, but we can't know exactly what we need until later
     // so I'm just feeding it useless numbers and then stripping them out to get the
     // correct base URL
-    var MapView = "{% url trailview.views.Map_ViewTrailStartingAtPano 0 0 %}".split("0/")[0];
+    var MapView = "{% url trailview.views.Map_ViewTrailById 0 %}".split("0/")[0];
     $(".close_trail_points_list").tooltip({
         show: { delay: 500 }
     });

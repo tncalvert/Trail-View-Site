@@ -19,5 +19,5 @@ urlpatterns = patterns('',
     url(r'^Trails/$', views.Trails_Trails),
     url(r'^Trails/GetPossibleEntryPoints/$', views.Trails_GetPossibleEntryPoints),
     url(r'^Map/Trail/(\d+)/$', views.Map_ViewTrailById),
-    url(r'^Map/Trail/(\d+)/(\d+)/$', views.Map_ViewTrailStartingAtPano),
+    url(r'^Map/Trail/(\d+)/(\d+)/$', views.Map_ViewTrailById),
 )
