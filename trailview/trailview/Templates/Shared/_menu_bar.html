@@ -3,12 +3,12 @@
 <div class="menu_bar">
     <ul>
         <li>
-            <a href="/Trails/">Trails</a>
+            <a href={% url trailview.views.Trails_Trails %}>Trails</a>
             <ul>
                 {% for trail in trails %}
                     <li>
-                        {% url trailview.views.Map_ViewTrailById trail.id as link%}
-                        <a href={{ link }}>{{ trail.Name }}</a>
+                        
+                        <a href={% url trailview.views.Map_ViewTrailById trail.id %}>{{ trail.Name }}</a>
                     </li>
                 {% endfor %}
             </ul>
