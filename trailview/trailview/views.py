@@ -3,6 +3,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.core.exceptions import ObjectDoesNotExist
+from django.views.decorators.http import require_POST
 from trailview.Models import models
 from trailview.JSModels import jsmodels
 from string import rstrip
@@ -94,16 +95,20 @@ def Map_ViewTrailById(request, trail_id, pano_id='-1'):
 
 	trail_name = models.Trail.objects.get(id = int(trail_id)).Name
 	panos = models.Panorama.objects.filter(TrailId = int(trail_id), PanoNumber__in = pano_nums)
+ 	links = models.Link.objects.filter(TrailId = int(trail_id), PanoId__in = map(lambda x: x.id, panos))
+ 	pois = models.PointOfInterest.objects.filter(TrailId = int(trail_id))
+
 	pano_models = []
+
 	for p in panos:
 		link_models = []
 		poi_models = []
-		for l in models.Link.objects.filter(TrailId = int(trail_id), PanoId = p.id):
+		for l in links.filter(PanoId = p.id):
 			link_models.append(jsmodels.LinkModel(heading=l.Heading,
 												  pano=l.PanoName,
 												  description=l.Description).__dict__)
 
-		for poi in models.PointOfInterest.objects.filter(TrailId = int(trail_id), StartPanoNum__lte = p.PanoNumber, EndPanoNum__gte = p.PanoNumber):
+		for poi in pois.filter(StartPanoNum__lte = p.PanoNumber, EndPanoNum__gte = p.PanoNumber):
 			name = poi.Name.replace('"', '&quot;').replace("'", "&#39")
 			desc = (rstrip(poi.Description[:97], " .,'") + "...").replace('"', '&quot;').replace("'", "&#39") if poi.Description else ''
 			poi_models.append(jsmodels.PointOfInterestInitModel(Name=name,
@@ -123,7 +128,7 @@ def Map_ViewTrailById(request, trail_id, pano_id='-1'):
 												  PointsOfInterest=poi_models).__dict__)
 
 	twpoi_models = []
-	for twp in models.PointOfInterest.objects.filter(TrailId = int(trail_id), StartPanoNum = None, EndPanoNum = None):
+	for twp in pois.filter(StartPanoNum = None, EndPanoNum = None):
 		name = poi.Name.replace('"', '&quot;').replace("'", "&#39")
 		desc = (rstrip(poi.Description[:97], " .,'") + "...").replace('"', '&quot;').replace("'", "&#39") if poi.Description else ''
 		twpoi_models.append(jsmodels.PointOfInterestInitModel(Name=name, 
@@ -145,3 +150,56 @@ def Map_ViewTrailById(request, trail_id, pano_id='-1'):
 	original_panos.extend(pano_nums)
 
 	return render_to_response('MapView.html', {'model' : model})
+
+# Retrieves a subset of the remaining panoramas for a given trail
+# Only accessible via POST
+@require_POST
+def Map_RequestMoreData(request):
+  trail_name = request.POST.get('trailName', '')
+  num = int(request.POST.get('num', '-1'))
+
+  if(trail_name == '' or num == -1):
+    return HttpResponse(status=400)
+
+  trail_id = models.Trail.objects.get(Name = trail_name)
+  total_panos = models.Panorama.objects.filter(TrailId = trail_id).count()
+
+  nums = range(num, min(panos_to_request + num + 1, total_panos + 1))
+  panos = models.Panorama.objects.filter(TrailId = trail_id, PanoNumber__in = nums)
+  links = models.Link.objects.filter(TrailId = trail_id, PanoId__in = map(lambda x: x.id, panos))
+  pois = models.PointOfInterest.filter(TrailId = trail_id)
+
+  pano_models = []
+  for p in panos:
+		link_models = []
+		poi_models = []
+		for l in links.filter(PanoId = p.id):
+			link_models.append(jsmodels.LinkModel(heading=l.Heading,
+												  pano=l.PanoName,
+												  description=l.Description).__dict__)
+
+		for poi in pois.filter(StartPanoNum__lte = p.PanoNumber, EndPanoNum__gte = p.PanoNumber):
+			name = poi.Name.replace('"', '&quot;').replace("'", "&#39")
+			desc = (rstrip(poi.Description[:97], " .,'") + "...").replace('"', '&quot;').replace("'", "&#39") if poi.Description else ''
+			poi_models.append(jsmodels.PointOfInterestInitModel(Name=name,
+																Description=desc, 
+																Category=poi.PoICategory).__dict__)
+		
+		pano_models.append(jsmodels.PanoramaModel(Name=p.Name, 
+												  Description=p.Description,
+												  PanoNumber=p.PanoNumber, 
+												  LocationLat=p.LocationLat, 
+												  LocationLng=p.LocationLng,
+												  TileWidth=p.TileWidth, 
+												  ImageWidth=p.WorldWidth, 
+												  ForwardHeading=p.ForwardHeading, 
+												  InitialHeading=p.InitialForwardHeading, 
+												  Links=link_models, 
+												  PointsOfInterest=poi_models).__dict__)
+
+  model = {
+  	'next': ((num + panos_to_request) if ((num + panos_to_request) <= total_panos) else -1),
+  	'panos': pano_models
+  }
+
+  return HttpResponse(simplejson.dumps(model, use_decimal=True), mimetype='application/json')

@@ -7,9 +7,8 @@
             <ul>
                 {% for trail in trails %}
                     <li>
-                        {% with link="/Map/Trail/"|catNum:trail.id %}
+                        {% url trailview.views.Map_ViewTrailById trail.id as link%}
                         <a href={{ link }}>{{ trail.Name }}</a>
-                        {% endwith %}
                     </li>
                 {% endfor %}
             </ul>

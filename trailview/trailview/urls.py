@@ -16,8 +16,9 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.Home_Home),
-    url(r'^Trails/$', views.Trails_Trails),
-    url(r'^Trails/GetPossibleEntryPoints/$', views.Trails_GetPossibleEntryPoints),
-    url(r'^Map/Trail/(\d+)/$', views.Map_ViewTrailById),
-    url(r'^Map/Trail/(\d+)/(\d+)/$', views.Map_ViewTrailById),
+    url(r'^trails/$', views.Trails_Trails),
+    url(r'^trails/getpossibleentrypoints/$', views.Trails_GetPossibleEntryPoints),
+    url(r'^map/trail/(\d+)/$', views.Map_ViewTrailById),
+    url(r'^map/trail/(\d+)/(\d+)/$', views.Map_ViewTrailById),
+    url(r'^map/requestmoredata/$', views.Map_RequestMoreData),
 )
