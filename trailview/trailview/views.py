@@ -1,7 +1,7 @@
 # TrailView Views
 
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_POST
 from trailview.Models import models
@@ -78,7 +78,7 @@ def Trails_GetPossibleEntryPoints(request):
 # Request for Map by trail_id
 def Map_ViewTrailById(request, trail_id, pano_id='-1'):
 	# This is only called on the first load, so reset original_panos
-	original_panos = []
+	original_panos[:] = []
 
 	if pano_id == '-1':
 		pano_id = models.Panorama.objects.get(TrailId = int(trail_id), PanoNumber = 0).id
@@ -151,10 +151,17 @@ def Map_ViewTrailById(request, trail_id, pano_id='-1'):
 
 	return render_to_response('MapView.html', {'model' : model})
 
+# Enters a trail indexed by PanoNumber instead of id
+def Map_ViewTrailByPanoNum(request, trail_id, pano_num):
+  pano_id = models.Panorama.objects.get(TrailId = int(trail_id), PanoNumber = int(pano_num)).id
+  return Map_ViewTrailById(request, trail_id, str(pano_id))
+  #return redirect('Map_ViewTrailById', args=(str(trail_id), str(pano_id)), kwargs={}) # **Doesn't work??
+
 # Retrieves a subset of the remaining panoramas for a given trail
 # Only accessible via POST
 @require_POST
 def Map_RequestMoreData(request):
+  
   trail_name = request.POST.get('trailName', '')
   num = int(request.POST.get('num', '-1'))
 
@@ -164,10 +171,11 @@ def Map_RequestMoreData(request):
   trail_id = models.Trail.objects.get(Name = trail_name)
   total_panos = models.Panorama.objects.filter(TrailId = trail_id).count()
 
-  nums = range(num, min(panos_to_request + num + 1, total_panos + 1))
+  nums = range(num, min(panos_to_request + num, total_panos + 1))
+  nums = filter(lambda x: not x in original_panos, nums)
   panos = models.Panorama.objects.filter(TrailId = trail_id, PanoNumber__in = nums)
   links = models.Link.objects.filter(TrailId = trail_id, PanoId__in = map(lambda x: x.id, panos))
-  pois = models.PointOfInterest.filter(TrailId = trail_id)
+  pois = models.PointOfInterest.objects.filter(TrailId = trail_id)
 
   pano_models = []
   for p in panos:

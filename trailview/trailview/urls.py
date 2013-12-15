@@ -20,5 +20,6 @@ urlpatterns = patterns('',
     url(r'^trails/getpossibleentrypoints/$', views.Trails_GetPossibleEntryPoints),
     url(r'^map/trail/(\d+)/$', views.Map_ViewTrailById),
     url(r'^map/trail/(\d+)/(\d+)/$', views.Map_ViewTrailById),
+    url(r'^map/trailbynum/(\d+)/(\d+)/$', views.Map_ViewTrailByPanoNum),
     url(r'^map/requestmoredata/$', views.Map_RequestMoreData),
 )
