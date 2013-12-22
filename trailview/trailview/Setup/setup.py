@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from trailview.Models.models import Trail, Panorama, Link, PointOfInterest
 from os import walk, path
 from io import open
+from string import strip
 import re
 
 class InfoComp(object):
@@ -195,11 +196,11 @@ def addPoIsForTrail(POI_File):
         PointOfInterest(StartPanoNum=int(v[0]),
                         EndPanoNum=int(v[1]),
                         TrailId=trail,
-                        Name=v[2],
+                        Name=strip(v[2], "'"),
                         PoICategory=int(v[3]),
-                        Photo=v[5] if v[5] != 'None' else None,
-                        Audio=v[6] if v[6] != 'None' else None,
-                        Description=v[7] if v[7] != 'None' else None).save()
+                        Photo=strip(v[5], "'") if v[5] != 'None' else None,
+                        Audio=strip(v[6], "'") if v[6] != 'None' else None,
+                        Description=strip(v[7], "'") if v[7] != 'None' else None).save()
 
 
 # Executes a SQL query to fix links in a specific trail

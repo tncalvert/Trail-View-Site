@@ -95,7 +95,7 @@ function updateSingleInfoArea(cat, obj) {
     obj.forEach(function (e, i, a) {
         contents += '<h4>' + e.Name + '</h4>';
         contents += '<h5>' + e.Description + '  '; // closes after span
-        contents += '<span id="seePoI" onclick="$.post(sRequestPoI, { Name: &quot;' + e.Name + '&quot;, Pano: ' + currentPanoNumber + ' }, openInfoItemOverlay, &quot;json&quot;)">Click to see more</span></h5>';
+        contents += '<span id="seePoI" onclick="$.post(sRequestPoI, { poi_name: &quot;' + e.Name + '&quot;, pano_num: ' + currentPanoNumber + ' }, openInfoItemOverlay, &quot;json&quot;)">Click to see more</span></h5>';
     });
     
     if (obj.length != 0) {
@@ -126,7 +126,7 @@ function openInfoItemOverlay(obj) {
     if(obj.Description != null)
         content += '<p>' + obj.Description + '</p>';
     if(obj.Audio != null)
-        content += '<audio controls="controls">Sorry, your browser does not support embedded HTML5 audio.<source src="/static/points_of_interest/Audio/' + obj.Audio + '" type="audio/mp3"/></audio>';
+        content += '<audio controls="controls">Sorry, your browser does not support embedded HTML5 audio.<source src="/static/points_of_interest/Audio/' + obj.Audio + '" type="audio/mp3"/><source src="/static/points_of_interest/Audio/' + obj.Audio.split('.')[0] + '.ogg" type="audio/ogg"/></audio>';
     $('#poiInfoPopup').html(content);
     $('#poiInfoPopup').dialog('open');
 }

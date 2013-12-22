@@ -1,4 +1,5 @@
 /trailview/trailview/static/panos/
-/trailview/trailview/static/points_of_interest
+/trailview/trailview/static/points_of_interest/
+/trailview/trailview/static/CSS/images/
 *.pyc
 *.suo

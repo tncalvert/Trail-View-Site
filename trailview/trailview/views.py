@@ -1,8 +1,8 @@
 # TrailView Views
 
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, redirect
-from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render_to_response
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.views.decorators.http import require_POST
 from trailview.Models import models
 from trailview.JSModels import jsmodels
@@ -37,8 +37,9 @@ def Trails_GetPossibleEntryPoints(request):
     
     if trail_id == None or filter == None:
       return HttpResponse(status=400)
-    
+
     pois = None
+    panos = None
     if(filter == 'PoIs'):
         pois = models.PointOfInterest.objects.filter(TrailId = int(trail_id))
     elif(filter == 'Atmo'):
@@ -52,26 +53,23 @@ def Trails_GetPossibleEntryPoints(request):
     else:
         panos = models.Panorama.objects.filter(TrailId = int(trail_id))
     
-    if not 'panos' in locals():
-        panos = models.Panorama.objects.filter(TrailId = int(trail_id), PanoNumber__in = map(lambda x: x.StartPanoNum or -1, pois))
+    if panos == None:
+		  panos = models.Panorama.objects.filter(TrailId = int(trail_id), PanoNumber__in = map(lambda x: x.StartPanoNum or -1, pois))
 
     # create JSModels for markers and return json of them
     markers = []
     count = 0
 
     for p in panos:
-        try:
-            title = pois.filter(StartPanoNum = p.PanoNumber)[0].Name if (pois != None) else ''
-        except ObjectDoesNotExist:
-            title = ''
+      title = pois.filter(StartPanoNum = p.PanoNumber)[0].Name if (pois != None) else ''
 
-        markers.append(jsmodels.MarkerModel(LocationLat=p.LocationLat,
-                                                 LocationLng=p.LocationLng,
-                                                 PanoId=p.id,
-                                                 TrailId=p.TrailId.id,
-                                                 orderOfMarkers=count,
-                                                 Title=title).__dict__)
-        count += 1
+      markers.append(jsmodels.MarkerModel(LocationLat=p.LocationLat,
+                                               LocationLng=p.LocationLng,
+                                               PanoId=p.id,
+                                               TrailId=p.TrailId.id,
+                                               orderOfMarkers=count,
+                                               Title=title).__dict__)
+      count += 1
     
     return HttpResponse(simplejson.dumps(markers, use_decimal=True), mimetype='application/json')
 
@@ -81,10 +79,16 @@ def Map_ViewTrailById(request, trail_id, pano_id='-1'):
 	original_panos[:] = []
 
 	if pano_id == '-1':
-		pano_id = models.Panorama.objects.get(TrailId = int(trail_id), PanoNumber = 0).id
+		try:
+			pano_id = models.Panorama.objects.get(TrailId = int(trail_id), PanoNumber = 0).id
+		except (ObjectDoesNotExist, MultipleObjectsReturned):
+			return HttpResponse(status=400)
 
-	pano_count = models.Panorama.objects.filter(TrailId = int(trail_id)).count()
-	center_pano = models.Panorama.objects.get(TrailId = int(trail_id), id = int(pano_id))
+	try:
+		pano_count = models.Panorama.objects.filter(TrailId = int(trail_id)).count()
+		center_pano = models.Panorama.objects.get(TrailId = int(trail_id), id = int(pano_id))
+	except (ObjectDoesNotExist, MultipleObjectsReturned):
+		return HttpResponse(status=400)
 
 	bottom = center_pano.PanoNumber - surrounding_panos
 	bottom = bottom if bottom >= 0 else 0
@@ -93,10 +97,13 @@ def Map_ViewTrailById(request, trail_id, pano_id='-1'):
 
 	pano_nums = range(bottom, top)
 
-	trail_name = models.Trail.objects.get(id = int(trail_id)).Name
-	panos = models.Panorama.objects.filter(TrailId = int(trail_id), PanoNumber__in = pano_nums)
- 	links = models.Link.objects.filter(TrailId = int(trail_id), PanoId__in = map(lambda x: x.id, panos))
- 	pois = models.PointOfInterest.objects.filter(TrailId = int(trail_id))
+	try:
+		trail_name = models.Trail.objects.get(id = int(trail_id)).Name
+		panos = models.Panorama.objects.filter(TrailId = int(trail_id), PanoNumber__in = pano_nums)
+	 	links = models.Link.objects.filter(TrailId = int(trail_id), PanoId__in = map(lambda x: x.id, panos))
+	 	pois = models.PointOfInterest.objects.filter(TrailId = int(trail_id))
+ 	except (ObjectDoesNotExist, MultipleObjectsReturned):
+ 		trail_name = '[Unknown Trail: %s]' % trail_id
 
 	pano_models = []
 
@@ -153,9 +160,13 @@ def Map_ViewTrailById(request, trail_id, pano_id='-1'):
 
 # Enters a trail indexed by PanoNumber instead of id
 def Map_ViewTrailByPanoNum(request, trail_id, pano_num):
-  pano_id = models.Panorama.objects.get(TrailId = int(trail_id), PanoNumber = int(pano_num)).id
-  return Map_ViewTrailById(request, trail_id, str(pano_id))
-  #return redirect('Map_ViewTrailById', args=(str(trail_id), str(pano_id)), kwargs={}) # **Doesn't work??
+	try:
+		pano_id = models.Panorama.objects.get(TrailId = int(trail_id), PanoNumber = int(pano_num)).id
+	except (ObjectDoesNotExist, MultipleObjectsReturned):
+		return HttpResponse(status=400)
+
+	return Map_ViewTrailById(request, trail_id, str(pano_id))
+	#return redirect('Map_ViewTrailById', args=(str(trail_id), str(pano_id)), kwargs={}) # **Doesn't work??
 
 # Retrieves a subset of the remaining panoramas for a given trail
 # Only accessible via POST
@@ -168,7 +179,11 @@ def Map_RequestMoreData(request):
   if(trail_name == '' or num == -1):
     return HttpResponse(status=400)
 
-  trail_id = models.Trail.objects.get(Name = trail_name)
+  try:
+  	trail_id = models.Trail.objects.get(Name = trail_name)
+  except (ObjectDoesNotExist, MultipleObjectsReturned):
+  	return HttpResponse(status=400)
+
   total_panos = models.Panorama.objects.filter(TrailId = trail_id).count()
 
   nums = range(num, min(panos_to_request + num, total_panos + 1))
@@ -211,3 +226,23 @@ def Map_RequestMoreData(request):
   }
 
   return HttpResponse(simplejson.dumps(model, use_decimal=True), mimetype='application/json')
+
+# Function retrieves information about a point of interest and returns it
+# for display in a dialog box
+@require_POST
+def Map_GetPointOfInterest(request):
+	poi_name = request.POST.get('poi_name', '')
+	pano_num = int(request.POST.get('pano_num', '-1'))
+
+	try:
+		poi = models.PointOfInterest.objects.get(Name = poi_name, StartPanoNum__lte = pano_num, EndPanoNum__gte = pano_num)
+	except (ObjectDoesNotExist, MultipleObjectsReturned):
+		return HttpResponse(status=400)
+
+	p = jsmodels.PointOfInterestModel(Name=poi.Name,
+	                                  Photo=poi.Photo,
+	                                  Audio=poi.Audio,
+	                                  Description=poi.Description,
+	                                  Category=poi.PoICategory).__dict__
+
+	return HttpResponse(simplejson.dumps(p, use_decimal=True), mimetype='application/json')

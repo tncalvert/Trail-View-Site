@@ -22,4 +22,5 @@ urlpatterns = patterns('',
     url(r'^map/trail/(\d+)/(\d+)/$', views.Map_ViewTrailById),
     url(r'^map/trailbynum/(\d+)/(\d+)/$', views.Map_ViewTrailByPanoNum),
     url(r'^map/requestmoredata/$', views.Map_RequestMoreData),
+    url(r'^map/getpointofinterest$', views.Map_GetPointOfInterest),
 )
