@@ -68,7 +68,7 @@ def insertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_
 			     TileWidth=Tile_Width,
 			     WorldWidth=Image_Width,
 			     ForwardHeading=c.Heading,
-			     InitialForwardHeading=int(forw_headings[idx - 1])).save()
+			     InitialForwardHeading=int(forw_headings[idx])).save()
 
 	panos = Panorama.objects.all().order_by('PanoNumber')
 
