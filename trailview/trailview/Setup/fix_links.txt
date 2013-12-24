@@ -1,0 +1,23 @@
+# File to fix links in panormas
+# Format is as follows
+# To remove a link:
+# remove [trail_id] [pano_number] '(Forward|Backwards)'
+#
+# To add a link:
+# insert [trail_id] [host_pano_number] [destination_pano_number] [angle] '(Forward|Backwards)'
+
+remove 11 297 'Forward'
+remove 11 300 'Forward'
+remove 11 301 'Backwards'
+remove 11 302 'Forward'
+remove 11 303 'Backwards'
+remove 11 311 'Forward'
+remove 11 312 'Backwards'
+
+insert 11 297 298 185 'Forward'
+insert 11 297 301 346 'Forward'
+insert 11 297 303 99 'Forward'
+insert 11 301 297 158 'Backwards'
+insert 11 303 297 233 'Backwards'
+insert 11 311 312 120 'Forward'
+insert 11 312 311 10 'Backwards'

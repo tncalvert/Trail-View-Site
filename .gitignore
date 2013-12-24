@@ -3,3 +3,4 @@
 /trailview/trailview/static/CSS/images/
 *.pyc
 *.suo
+.pg_pwd

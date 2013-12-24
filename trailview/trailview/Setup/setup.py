@@ -1,6 +1,6 @@
 # Used to enter data in the database, based on the files given
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from trailview.Models.models import Trail, Panorama, Link, PointOfInterest
 from os import walk, path
 from io import open
@@ -14,6 +14,17 @@ class InfoComp(object):
 		self.Name = Name
 		self.Heading = Heading
 
+# Inserts data into the database per the files added
+# [GPS_Coords] File containing a list of gps coordinates (see waypoints.txt)
+# [Pano_Dir] Directory of all folders for panoramas (e.g., trailview/static/panos/Cadillac South Ridge Trail/)
+# [Headings] File containing a list of all headings pointing to North in relation to
+#            the center of each corresponding panorama
+# [Forw_Headings] Files containing a list of all headings pointing forward on the trail in relation
+#                 to North as defined by the headings in the previous file
+# [Trail_Name] Name for the trail
+# [Entry_Pano] 'True' or 'False' (including quotes) to indicate if an entry point is being used
+# [Images_Width] Width of all images
+# [Tile_Width] Width of the tiles that make up the images
 def insertData(GPS_Coords, Pano_Dir, Headings, Forw_Headings, Trail_Name, Entry_Pano, Image_Width, Tile_Width):
 	if not path.exists(Pano_Dir):
 		print "Pano Dir doesn't exists"
@@ -177,6 +188,7 @@ def addPoIsForTrail(POI_File):
         file = open(POI_File)
     except IOError:
         print "Could not open file. Please make sure it exists."
+        return
     
     # Matches the format of the information
     reg = re.finditer(r"\{(\d+|None),\n(\d+),\n('[\w\s,.'\-]*'),\n(\d+),\n(\d+),\n('[\w\s,.'\-]*'|None),\n('[\w\s,.'\-]*'|None),\n('[\w\s,.!'\"\-]*'|None)\}", file.read())
@@ -190,7 +202,7 @@ def addPoIsForTrail(POI_File):
 
         try:
             trail = Trail.objects.get(id = int(v[4]))
-        except ObjectDoesNotExist:
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
             continue
 
         PointOfInterest(StartPanoNum=int(v[0]),
@@ -203,6 +215,71 @@ def addPoIsForTrail(POI_File):
                         Description=strip(v[7], "'") if v[7] != 'None' else None).save()
 
 
-# Executes a SQL query to fix links in a specific trail
-def fixLinksForTrail(Trail_Name, SQL_Query):
-    return ''
+# Reads in a file listing changes to links and performs those changes
+def fixLinksForTrail(Link_Fix_File):
+	try:
+		file = open(Link_Fix_File)
+	except IOError:
+		print "Could not open file. Please make sure it exists."
+		return
+
+	data = file.read()
+	rem = re.finditer(r"remove (\d+) (\d+) '(Forward|Backwards)'\n", data)
+	ins = re.finditer(r"insert (\d+) (\d+) (\d+) (\d+) '(Forward|Backwards)'\n", data)
+
+	removals = []
+	insertions = []
+
+	# removal
+	# 0 - TrailId
+	# 1 - PanoNumber
+	# 2 - Link Description
+
+	# insertion
+	# 0 - TrailId
+	# 1 - PanoNumber of host pano
+	# 2 - PanoNumber of destination pano
+	# 3 - Angle
+	# 4 - Description
+
+	for r in rem:
+		removals.append(r.groups())
+
+	for i in ins:
+		insertions.append(i.groups())
+
+	for r in removals:
+		print "Trail: %s, Pano: %s, Desc: %s" % (r[0], r[1], r[2])
+		try:
+			trail = Trail.objects.get(id = int(r[0]))
+			pano = Panorama.objects.get(TrailId = trail, PanoNumber = int(r[1]))
+		except (ObjectDoesNotExist, MultipleObjectsReturned):
+			print "Could not match Trail or Panorama specified."
+			continue
+
+		try:
+			link = Link.objects.get(TrailId = trail, PanoId = pano, Description = r[2])
+			link.delete()
+		except (ObjectDoesNotExist, MultipleObjectsReturned):
+			print "Could not find the defined link."
+			continue
+
+	for i in insertions:
+		print "Trail: %s, Host: %s, Dest: %s, Angle: %s, Desc: %s" % (i[0], i[1], i[2], i[3], i[4])
+		try:
+			trail = Trail.objects.get(id = int(i[0]))
+			host_pano = Panorama.objects.get(TrailId = trail, PanoNumber = int(i[1]))
+			dest_pano = Panorama.objects.get(TrailId = trail, PanoNumber = int(i[2]))
+		except (ObjectDoesNotExist, MultipleObjectsReturned):
+			print "Could not match Trail or one of the Panoramas specified."
+			continue
+
+		link = Link(PanoId=host_pano,
+								TrailId=trail,
+								Heading=int(i[3]),
+								Description=i[4],
+								PanoName=dest_pano.Name,
+								IsEntryPano=False)
+
+		link.save()
+
