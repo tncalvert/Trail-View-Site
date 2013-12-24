@@ -246,3 +246,57 @@ def Map_GetPointOfInterest(request):
 	                                  Category=poi.PoICategory).__dict__
 
 	return HttpResponse(simplejson.dumps(p, use_decimal=True), mimetype='application/json')
+
+# Displays a list of all points of interest in a list
+def PoI_ListAll(request):
+
+  pois = models.PointOfInterest.objects.all()
+  trails = models.Trail.objects.all()
+
+  model = jsmodels.PointsOfInterestListModel(Trails=trails,
+                                             atmo=pois.filter(PoICategory = models.PoICategory.Atmospheric).order_by('Name'),
+                                             fau=pois.filter(PoICategory = models.PoICategory.Fauna).order_by('Name'),
+                                             flo=pois.filter(PoICategory = models.PoICategory.Flora).order_by('Name'),
+                                             lan=pois.filter(PoICategory = models.PoICategory.Landmark).order_by('Name'))
+
+  return render_to_response('PoIsList.html', { 'model': model })
+
+# Displays a list of Atmospherics
+def PoI_Atmospherics(request):
+
+  atmos = models.PointOfInterest.objects.filter(PoICategory = models.PoICategory.Atmospheric).order_by('Name')
+  trails = models.Trail.objects.all()
+
+  model = jsmodels.PointsOfInterestWithTrailsModel(PoIs=atmos, Trails=trails)
+
+  return render_to_response('PoIsAtmospherics.html', { 'model': model })
+
+# Displays a list of Fauna
+def PoI_Fauna(request):
+
+  atmos = models.PointOfInterest.objects.filter(PoICategory = models.PoICategory.Fauna).order_by('Name')
+  trails = models.Trail.objects.all()
+
+  model = jsmodels.PointsOfInterestWithTrailsModel(PoIs=atmos, Trails=trails)
+
+  return render_to_response('PoIsFauna.html', { 'model': model })
+
+# Displays a list of Flora
+def PoI_Flora(request):
+
+  atmos = models.PointOfInterest.objects.filter(PoICategory = models.PoICategory.Flora).order_by('Name')
+  trails = models.Trail.objects.all()
+
+  model = jsmodels.PointsOfInterestWithTrailsModel(PoIs=atmos, Trails=trails)
+
+  return render_to_response('PoIsFlora.html', { 'model': model })
+
+# Displays a list of Landmarks
+def PoI_Landmarks(request):
+
+  atmos = models.PointOfInterest.objects.filter(PoICategory = models.PoICategory.Landmark).order_by('Name')
+  trails = models.Trail.objects.all()
+
+  model = jsmodels.PointsOfInterestWithTrailsModel(PoIs=atmos, Trails=trails)
+
+  return render_to_response('PoIsLandmarks.html', { 'model': model })

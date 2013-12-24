@@ -17,8 +17,8 @@
 
 {% for t in trails %}
     <div class="trailList">
-        {% with link="/Map/Trail/"|catNum:t.id click="requestPointInformation('"|catNum:t.id|add:"')" id="close_trail_points_list_"|catNum:t.id %}
-        <p class="Link"><a href="{{ link }}">{{ t.Name }}</a>
+        {% with click="requestPointInformation('"|catNum:t.id|add:"')" id="close_trail_points_list_"|catNum:t.id %}
+        <p class="Link"><a href={% url trailview.views.Map_ViewTrailById t.id %}>{{ t.Name }}</a>
             <span class="close_trail_points_list" id="{{ id }}" onclick="{{ click }}" title="Click to show points on the map.">&rarr;</span>
         </p>
         {% endwith %}

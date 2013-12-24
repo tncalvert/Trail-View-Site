@@ -1,0 +1,72 @@
+{% extends 'Layout.html' %}
+
+{% load static %}
+{% load filters %}
+
+{% block title %}Landmarks{% endblock %}
+
+{% block content %}
+
+<br />
+<div style="border-bottom: 2px solid #485a28">
+    <span class="Title">Landmarks</span><br />
+    <span class="SubTitle">Expand each section to see the Landmarks by trail.</span><br />
+    <span class="SubTitle">Or, click on a link to be taken to the map, and see each item in context.</span>
+</div>
+
+<div id="lanCatTop" class="poiCatTop">
+    {% for t in model.Trails %}
+        <p class="Link">
+            <span id="close-lanCat" class="closeCat" title="Click to see more information.">+</span>
+            <a href={% url trailview.views.Map_ViewTrailById t.id %}>{{ t.Name }}</a>
+        </p>
+        <div id="lanCat" class="subPoiCat">          
+          {% for p in model.PoIs %}
+              <div id="poiSec" class="poiCat">
+                  {% if p.Photo %}
+                      <img src={% static "points_of_interest/photos/"|add:p.Photo %} />
+                  {% endif %}
+                  <h3>{{ p.Name }}</h3>
+                  <h4>{{ p.Description }}</h4>
+                  {% if p.Audio %}
+                      <audio controls="controls">
+                          Sorry, your browser does not support embedded HTML5 audio.
+                          <source src={% static "points_of_interest/audio/"|add:p.Audio|add:".ogg" %} type="audio/ogg" />
+                          <source src={% static "points_of_interest/audio/"|add:p.Audio|add:".mp3" %} type="audio/mp3" />
+                      </audio>
+                      <br />
+                  {% endif %}
+                  <span class="poiSubLink">
+                    {% with title=p.TrailId.Name|add:"-"|catNum:p.StartPanoNum %}
+                    <a href={% url trailview.views.Map_ViewTrailByPanoNum p.TrailId.id, p.StartPanoNum %}>{{ title }}</a>
+                    {% endwith %}
+                  </span>
+              </div>
+          {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+<script type="text/javascript">
+    $('#lanCat').hide();
+    $(".closeCat").tooltip({
+        show: { delay: 500 },
+        content: function (c) {
+            if ($(this).text() == "+") {
+                c("Click to see more information.");
+            } else {
+                c("Click to hide additional information.");
+            }
+        }
+    });
+    $('#close-lanCat').click(function () {
+        $('#lanCat').slideToggle();
+        if ($('#close-lanCat').text() == '+') {
+            $('#close-lanCat').text('-');
+        } else {
+            $('#close-lanCat').text('+');
+        }
+    });
+</script>
+
+{% endblock %}

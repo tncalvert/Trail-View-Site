@@ -1,0 +1,188 @@
+{% extends 'Layout.html' %}
+
+{% load static %}
+{% load filters %}
+
+{% block title %}Points of Interest{% endblock %}
+
+{% block content %}
+
+<br />
+<div style="border-bottom: 2px solid #485a28">
+    <span class="Title">Points of Interest</span><br />
+    <span class="SubTitle">Expand sections to see what interesting things you can find.</span><br />
+    <span class="SubTitle">Click on a category to see each one listed by trail. Or, click on the link below each item to see it on the trail.</span>
+</div>
+
+<div id="atmoCatTop" class="poiCatTop">
+    <p class="Link">
+        <span id="close-atmoCat" class="closeCat" title="Click to see more information.">+</span>
+        <a href={% url trailview.views.PoI_Atmospherics %}>Atmospherics</a>
+    </p>
+    <div id="atmoCat" class="subPoiCat">
+        {% for p in model.atmo %}
+            <div id="poiSec" class="poiCat">
+                {% if p.Photo %}
+                    <img src={% static "points_of_interest/photos/"|add:p.Photo %} />
+                {% endif %}
+                <h3>{{ p.Name }}</h3>
+                <h4>{{ p.Description }}</h4>
+                {% if p.Audio %}
+                    <audio controls="controls">
+                        Sorry, your browser does not support embedded HTML5 audio.
+                        <source src={% static "points_of_interest/audio/"|add:p.Audio|add:".ogg" %} type="audio/ogg" />
+                        <source src={% static "points_of_interest/audio/"|add:p.Audio|add:".mp3" %} type="audio/mp3" />
+                    </audio>
+                    <br />
+                {% endif %}
+                <span class="poiSubLink">
+                  {% with title=p.TrailId.Name|add:"-"|catNum:p.StartPanoNum %}
+                  <a href={% url trailview.views.Map_ViewTrailByPanoNum p.TrailId.id, p.StartPanoNum %}>{{ title }}</a>
+                  {% endwith %}
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div id="fauCatTop" class="poiCatTop">
+    <p class="Link">
+        <span id="close-fauCat" class="closeCat" title="Click to see more information.">+</span>
+        <a href={% url trailview.views.PoI_Fauna %}>Fauna</a>
+    </p>
+    <div id="fauCat" class="subPoiCat">
+        {% for p in model.fau %}
+            <div id="poiSec" class="poiCat">
+                {% if p.Photo %}
+                    <img src={% static "points_of_interest/photos/"|add:p.Photo %} />
+                {% endif %}
+                <h3>{{ p.Name }}</h3>
+                <h4>{{ p.Description }}</h4>
+                {% if p.Audio %}
+                    <audio controls="controls">
+                        Sorry, your browser does not support embedded HTML5 audio.
+                        <source src={% static "points_of_interest/audio/"|add:p.Audio|add:".ogg" %} type="audio/ogg" />
+                        <source src={% static "points_of_interest/audio/"|add:p.Audio|add:".mp3" %} type="audio/mp3" />
+                    </audio>
+                    <br />
+                {% endif %}
+                <span class="poiSubLink">
+                  {% with title=p.TrailId.Name|add:"-"|catNum:p.StartPanoNum %}
+                  <a href={% url trailview.views.Map_ViewTrailByPanoNum p.TrailId.id, p.StartPanoNum %}>{{ title }}</a>
+                  {% endwith %}
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div id="floCatTop" class="poiCatTop">
+    <p class="Link">
+        <span id="close-floCat" class="closeCat" title="Click to see more information.">+</span>
+        <a href={% url trailview.views.PoI_Flora %}>Flora</a>
+    </p>
+    <div id="floCat" class="subPoiCat">
+        {% for p in model.flo %}
+            <div id="poiSec" class="poiCat">
+                {% if p.Photo %}
+                    <img src={% static "points_of_interest/photos/"|add:p.Photo %} />
+                {% endif %}
+                <h3>{{ p.Name }}</h3>
+                <h4>{{ p.Description }}</h4>
+                {% if p.Audio %}
+                    <audio controls="controls">
+                        Sorry, your browser does not support embedded HTML5 audio.
+                        <source src={% static "points_of_interest/audio/"|add:p.Audio|add:".ogg" %} type="audio/ogg" />
+                        <source src={% static "points_of_interest/audio/"|add:p.Audio|add:".mp3" %} type="audio/mp3" />
+                    </audio>
+                    <br />
+                {% endif %}
+                <span class="poiSubLink">
+                  {% with title=p.TrailId.Name|add:"-"|catNum:p.StartPanoNum %}
+                  <a href={% url trailview.views.Map_ViewTrailByPanoNum p.TrailId.id, p.StartPanoNum %}>{{ title }}</a>
+                  {% endwith %}
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div id="lanCatTop" class="poiCatTop">
+    <p class="Link">
+        <span id="close-lanCat" class="closeCat" title="Click to see more information.">+</span>
+        <a href={% url trailview.views.PoI_Landmarks %}>Landmarks</a>
+    </p>
+    <div id="lanCat" class="subPoiCat">
+        {% for p in model.lan %}
+            <div id="poiSec" class="poiCat">
+                {% if p.Photo %}
+                    <img src={% static "points_of_interest/photos/"|add:p.Photo %} />
+                {% endif %}
+                <h3>{{ p.Name }}</h3>
+                <h4>{{ p.Description }}</h4>
+                {% if p.Audio %}
+                    <audio controls="controls">
+                        Sorry, your browser does not support embedded HTML5 audio.
+                        <source src={% static "points_of_interest/audio/"|add:p.Audio|add:".ogg" %} type="audio/ogg" />
+                        <source src={% static "points_of_interest/audio/"|add:p.Audio|add:".mp3" %} type="audio/mp3" />
+                    </audio>
+                    <br />
+                {% endif %}
+                <span class="poiSubLink">
+                  {% with title=p.TrailId.Name|add:"-"|catNum:p.StartPanoNum %}
+                  <a href={% url trailview.views.Map_ViewTrailByPanoNum p.TrailId.id, p.StartPanoNum %}>{{ title }}</a>
+                  {% endwith %}
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#atmoCat').hide();
+    $('#fauCat').hide();
+    $('#floCat').hide();
+    $('#lanCat').hide();
+    $(".closeCat").tooltip({
+        show: { delay: 500 },
+        content: function (c) {
+            if ($(this).text() == "+") {
+                c("Click to see more information.");
+            } else {
+                c("Click to hide additional information.");
+            }
+        }
+    });
+
+    $('#close-atmoCat').click(function () {
+        $('#atmoCat').slideToggle();
+        if ($('#close-atmoCat').text() == '+') {
+            $('#close-atmoCat').text('-');
+        } else {
+            $('#close-atmoCat').text('+');
+        }
+    });
+    $('#close-fauCat').click(function () {
+        $('#fauCat').slideToggle();
+        if ($('#close-fauCat').text() == '+') {
+            $('#close-fauCat').text('-');
+        } else {
+            $('#close-fauCat').text('+');
+        }
+    });
+    $('#close-floCat').click(function () {
+        $('#floCat').slideToggle();
+        if ($('#close-floCat').text() == '+') {
+            $('#close-floCat').text('-');
+        } else {
+            $('#close-floCat').text('+');
+        }
+    });
+    $('#close-lanCat').click(function () {
+        $('#lanCat').slideToggle();
+        if ($('#close-lanCat').text() == '+') {
+            $('#close-lanCat').text('-');
+        } else {
+            $('#close-lanCat').text('+');
+        }
+    });
+</script>
+
+{% endblock %}

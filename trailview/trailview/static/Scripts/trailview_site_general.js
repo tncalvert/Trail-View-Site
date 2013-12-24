@@ -126,7 +126,7 @@ function openInfoItemOverlay(obj) {
     if(obj.Description != null)
         content += '<p>' + obj.Description + '</p>';
     if(obj.Audio != null)
-        content += '<audio controls="controls">Sorry, your browser does not support embedded HTML5 audio.<source src="/static/points_of_interest/Audio/' + obj.Audio + '" type="audio/mp3"/><source src="/static/points_of_interest/Audio/' + obj.Audio.split('.')[0] + '.ogg" type="audio/ogg"/></audio>';
+        content += '<audio controls="controls">Sorry, your browser does not support embedded HTML5 audio.<source src="/static/points_of_interest/Audio/' + obj.Audio + '.ogg" type="audio/ogg"/><source src="/static/points_of_interest/Audio/' + obj.Audio + '.mp3" type="audio/mp3"/></audio>';
     $('#poiInfoPopup').html(content);
     $('#poiInfoPopup').dialog('open');
 }
