@@ -10,10 +10,10 @@
 <script type="text/javascript">
     var sRequestMoreData = "{% url trailview.views.Map_RequestMoreData %}";
     var sRequestPoI = "{% url trailview.views.Map_GetPointOfInterest %}";
-    var sPointsOfInterestAtmo = "/RequestPoI/Atmo/";
-    var sPointsOfInterestFau = "/RequestPoI/Fau/";
-    var sPointsOfInterestFlo = "/RequestPoI/Flo/";
-    var sPointsOfInterestLan = "/RequestPoI/Lan/";
+    var sPointsOfInterestAtmo = "{% url trailview.views.PoI_Atmospherics %}";
+    var sPointsOfInterestFau = "{% url trailview.views.PoI_Fauna %}";
+    var sPointsOfInterestFlo = "{% url trailview.views.PoI_Flora %}";
+    var sPointsOfInterestLan = "{% url trailview.views.PoI_Landmarks %}";
     var totalPanos = {{ model.totalPanos }};
 </script>
 
